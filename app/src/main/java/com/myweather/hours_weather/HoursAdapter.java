@@ -15,8 +15,11 @@ import com.myweather.Global;
 import com.myweather.R;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.HoursViewHolder> {
@@ -63,8 +66,16 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.HoursViewHol
             imgTempHours = itemView.findViewById(R.id.imgTempHours);
         }
     }
-    private static int getHours(String time) {
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(time));
-        return cal.get(Calendar.HOUR_OF_DAY);
+    private static String getHours(String time) {
+        TimeZone timeZone = TimeZone.getTimeZone("ICT");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm");
+        dateFormat.setTimeZone(timeZone);
+        try {
+            Date date = dateFormat.parse(time);
+            return  date.getHours()+"";
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "null";
     }
 }
