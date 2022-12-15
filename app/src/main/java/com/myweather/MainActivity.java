@@ -75,51 +75,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         inData();
         inView();
-        mWeatherServices = RetrofitClient.getServices(Global.BASE_URL, WeatherServices.class);
-//        mWeatherServices.getWeatherByCityName("Hà Nội", Global.API_KEY_M).enqueue(new Callback<JsonObject>() {
-//            @Override
-//            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-//                if (response.isSuccessful()) {
-//                    if (response.code() == 200) {
-////                        Log.d(TAG, "onResponse: " + response.body());
-//                    } else {
-////                        Log.d(TAG, "onResponse: " + response.code() + " | " + response.message());
-//                    }
-//                } else {
-////                    Log.d(TAG, "onResponse: unsucessfull");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JsonObject> call, Throwable t) {
-////                Log.d(TAG, "onFailure: " +t.getMessage());
-//            }
-//        });
-        mWeatherServices.getWeatherByCityNameModel("Hà Nội", Global.API_KEY_M).enqueue(new Callback<CurrentWeather>() {
-            @Override
-            public void onResponse(Call<CurrentWeather> call, Response<CurrentWeather> response) {
-                if (response.isSuccessful()) {
-                    if (response.code() == 200) {
-                        CurrentWeather model = response.body();
-                        bindCurrentWeather(model);
-//                        Log.d(TAG, "onResponse: " + model.getName());
-                    } else {
-//                        Log.d(TAG, "onResponse: " + response.code() + " | " + response.message());
-                    }
-                } else {
-//                    Log.d(TAG, "onResponse: unsucessfull");
-                }
-            }
 
-            @Override
-            public void onFailure(Call<CurrentWeather> call, Throwable t) {
-            }
-        });
     }
 
     private void inData() {
         mListWeather = new ArrayList<>();
+        mHoursAdapter = new HoursAdapter(mListWeather);
+
+        //  mWeatherServices chỉ cần khởi tạo một lần trong MainActivity
         mWeatherServices = RetrofitClient.getServices(Global.BASE_URL, WeatherServices.class);
+
+        requestCurrentWeatherByCityName();
+        requestHoursWeatherByCityName();
+    }
+
+    private void requestHoursWeatherByCityName() {
         mWeatherServices.getWeatherByCityNameHours("Hà Nội", Global.API_KEY_M).enqueue(new Callback<ForecastWeather>() {
             @Override
             public void onResponse(Call<ForecastWeather> call, Response<ForecastWeather> response) {
@@ -140,6 +110,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ForecastWeather> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void requestCurrentWeatherByCityName() {
+        mWeatherServices.getWeatherByCityNameModel("Hà Nội", Global.API_KEY_M).enqueue(new Callback<CurrentWeather>() {
+            @Override
+            public void onResponse(Call<CurrentWeather> call, Response<CurrentWeather> response) {
+                if (response.isSuccessful()) {
+                    if (response.code() == 200) {
+                        CurrentWeather model = response.body();
+                        bindCurrentWeather(model);
+                    } else {
+//                        Log.d(TAG, "onResponse: " + response.code() + " | " + response.message());
+                    }
+                } else {
+//                    Log.d(TAG, "onResponse: unsucessfull");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CurrentWeather> call, Throwable t) {
             }
         });
     }
@@ -193,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        mHoursAdapter = new HoursAdapter(mListWeather);
         rvHours.setAdapter(mHoursAdapter);
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override

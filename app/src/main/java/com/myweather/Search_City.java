@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class Search_City extends AppCompatActivity {
 
@@ -24,6 +25,9 @@ public class Search_City extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_city);
         Intent intent = getIntent();
+
+        ButterKnife.bind(this);
+
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

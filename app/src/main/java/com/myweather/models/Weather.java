@@ -15,7 +15,7 @@ public class Weather {
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("drawable-v24/icon")
+    @SerializedName("icon")
     @Expose
     private String icon;
 

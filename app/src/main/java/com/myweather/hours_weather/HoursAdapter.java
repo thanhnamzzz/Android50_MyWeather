@@ -40,7 +40,10 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.HoursViewHol
         WeatherHours weatherHours = mListWeather.get(position);
 //        holder.tvTimeHours.setText(weatherHours.getDtTxt());
         holder.tvTimeHours.setText(getHours(weatherHours.getDtTxt())+":00");
-        Glide.with(mContext).load(Global.getImgForecast(weatherHours.getWeather().get(position).getIcon())).into(holder.imgTempHours);
+        // get object weather trong list weather của weatherHours chứ không phải get theo mlistWeather
+        // Glide.with(mContext).load(Global.getImgForecast(weatherHours.getWeather().get(position).getIcon())).into(holder.imgTempHours);
+        // Phải get tại position = 0 vì list weather của weatherHours chỉ có một phần tử
+        Glide.with(mContext).load(Global.getImgForecast(weatherHours.getWeather().get(0).getIcon())).into(holder.imgTempHours);
         holder.tvTempHours.setText(Global.convertKtoC(weatherHours.getMain().getTemp()));
     }
 
